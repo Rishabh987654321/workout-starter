@@ -1,0 +1,106 @@
+{
+  "format": "aira-workout-run-v1",
+  "label": "after",
+  "appVersion": "2.0.0",
+  "schemaVersion": "3",
+  "selectedProvider": "mock",
+  "note": "AERO-9 zero-g orbital cadence routine tested with complete 4-phase stepper progression, simulated breathing & isometric hold timers, dynamic metric tuning (+28% cadence boost), and certification debrief.",
+  "events": [
+    {
+      "kind": "input",
+      "text": "/workout"
+    },
+    {
+      "kind": "response",
+      "result": {
+        "turn": {
+          "reply": "AERO-9 Orbital Cadence program loaded. Welcome aboard the Helios training deck, Cadet.\n```openui\nroot = Screens([])\n```\n```openui\nroot = Screens([phase1, phase2, phase3, phase4])\nphase1 = Screen([badge1, title1, desc1, metric1, metric2, cue1, followups1])\nbadge1 = Badge(\"ORBITAL CALIBRATION ACTIVE\", \"PHASE 01\", \"info\")\ntitle1 = Text(\"AERO-9: Orbital Cadence Calibration\", \"title\")\ndesc1 = Text(\"Welcome to the Helios Zero-G training ring. Before we engage the kinetic drives, we calibrate your neural cadence and simulated kinetic harness.\", \"description\")\nmetric1 = MetricCard(\"74 BPM\", \"Harmonic Resting Pulse\", \"Nominal\")\nmetric2 = MetricCard(\"1.0 G\", \"Synthetic Gravity Baseline\", \"Standard\")\ncue1 = Cue(\"Welcome Cadet. Neural telemetry linked. Prepare for simulated zero-g cadence calibration.\")\nfollowups1 = FollowUps([\"Begin Cadence Prep\", \"Increase Simulated Gravity to 1.5G\", \"Review Protocol Specs\"])\nphase2 = Screen([badge2, title2, body2, timer2, keyw2, alert2, cue2, followups2])\nbadge2 = Badge(\"ATMOSPHERIC PRE-IGNITION\", \"PHASE 02\", \"info\")\ntitle2 = Text(\"Zero-G Rhythm & Synaptic Breathing\", \"title\")\nbody2 = Text(\"Engage the simulated harmonic cycle. Synchronize your breathing with the chamber cadence pulse.\", \"body\")\ntimer2 = Timer(\"Orbital Synchronization Pulse\", 45)\nkeyw2 = Keyword(\"4-4-4-4\", \"Box Breathing Rhythm\")\nalert2 = Alert(\"info\", \"Inhale on cyan pulse, hold in zero-g apex, exhale on thruster vent.\")\ncue2 = Cue(\"Chamber pressurized. Inhale through the solar intake, hold at micro-gravity apex, exhale steady.\")\nfollowups2 = FollowUps([\"Advance to Kinetic Circuit\", \"Reset Pulse Timer\", \"Lower Resistance\"])\nphase3 = Screen([badge3, title3, progress3, metric3a, metric3b, list3, timer3, cue3, followups3])\nbadge3 = Badge(\"HYPER-DRIVE CIRCUIT\", \"PHASE 03\", \"warning\")\ntitle3 = Text(\"Tachyon Core Resistance Matrix\", \"title\")\nprogress3 = ProgressBar(\"Hyper-Drive Chamber Load\", 75, \"Station 3 of 4 · Flux nominal\")\nmetric3a = MetricCard(\"18 Pulses\", \"Tachyon Reps Completed\", \"+25%\")\nmetric3b = MetricCard(\"142 BPM\", \"Simulated Peak Cadence\", \"Target Met\")\nlist3 = List([item1, item2, item3])\nitem1 = ListItem(\"Station Alpha: 12 Tachyon Resistance Pulses\", \"bullet\")\nitem2 = ListItem(\"Station Beta: 30s Grav-Field Isometric Hold\", \"bullet\")\nitem3 = ListItem(\"Station Gamma: 15 Photon Cadence Sprints\", \"bullet\")\ntimer3 = Timer(\"Grav-Field Core Lock\", 30)\ncue3 = Cue(\"Full power to kinetic dampers. Maintain core alignment against the simulated graviton flux!\")\nfollowups3 = FollowUps([\"Boost Cadence (+20%)\", \"Complete Station\", \"Transition to Cooldown\"])\nphase4 = Screen([badge4, title4, desc4, metric4a, metric4b, timer4, list4, cue4, followups4])\nbadge4 = Badge(\"MISSION ACCOMPLISHED\", \"PHASE 04\", \"success\")\ntitle4 = Text(\"Atmospheric Re-entry & Synaptic Debrief\", \"title\")\ndesc4 = Text(\"Outstanding execution. Simulated kinetic telemetry confirms optimal neuro-muscular sync.\", \"description\")\nmetric4a = MetricCard(\"98.4%\", \"Neural Flow Coherence\", \"Elite Rank\")\nmetric4b = MetricCard(\"420 KCAL\", \"Simulated Energy Expended\", \"Optimal\")\ntimer4 = Timer(\"Cooling Vent Cycle\", 30)\nlist4 = List([rec1, rec2, rec3])\nrec1 = ListItem(\"Vanguard Zero-G Certification: Class I Awarded\", \"plus\")\nrec2 = ListItem(\"Post-routine simulated hydration protocol initiated\", \"bullet\")\nrec3 = ListItem(\"Telemetry log ready for station archive\", \"bullet\")\ncue4 = Cue(\"Deceleration complete. Exceptional performance, Cadet. You are certified for deep-space orbital sortie.\")\nfollowups4 = FollowUps([\"Export Mission Telemetry\", \"Restart AERO-9 Routine\", \"Return to Ready Room\"])\n```"
+        },
+        "versions": {
+          "mode": "mock",
+          "provider": "mock",
+          "model": "fixture-aero9",
+          "app": "2.0.0",
+          "schema": "3"
+        }
+      }
+    },
+    {
+      "kind": "input",
+      "text": "Begin Cadence Prep"
+    },
+    {
+      "kind": "response",
+      "result": {
+        "turn": {
+          "reply": "Advancing to Atmospheric Pre-Ignition & Cadence Breathing.\n```openui\nroot = Screens([phase1, phase2, phase3, phase4], phase2)\n```"
+        }
+      }
+    },
+    {
+      "kind": "input",
+      "text": "Advance to Kinetic Circuit"
+    },
+    {
+      "kind": "response",
+      "result": {
+        "turn": {
+          "reply": "Advancing to Hyper-Drive Kinetic Circuit.\n```openui\nroot = Screens([phase1, phase2, phase3, phase4], phase3)\n```"
+        }
+      }
+    },
+    {
+      "kind": "input",
+      "text": "Boost Cadence (+20%)"
+    },
+    {
+      "kind": "response",
+      "result": {
+        "turn": {
+          "reply": "Hyper-Drive flux increased: simulated cadence boosted to 160 BPM (+28%).\n```openui\nmetric3b = MetricCard(\"160 BPM\", \"Simulated Peak Cadence\", \"+28%\")\nprogress3 = ProgressBar(\"Hyper-Drive Chamber Load\", 92, \"Overdrive active\")\n```"
+        }
+      }
+    },
+    {
+      "kind": "input",
+      "text": "Transition to Cooldown"
+    },
+    {
+      "kind": "response",
+      "result": {
+        "turn": {
+          "reply": "Entering Atmospheric Re-entry & Synaptic Debrief.\n```openui\nroot = Screens([phase1, phase2, phase3, phase4], phase4)\n```"
+        }
+      }
+    }
+  ],
+  "state": {
+    "ui_state": "root = Screens([phase1, phase2, phase3, phase4], phase4)",
+    "client_events": [
+      "Now on step 4 of 4."
+    ]
+  },
+  "timers": [
+    {
+      "id": "timer2",
+      "label": "Orbital Synchronization Pulse",
+      "seconds": 45,
+      "remaining": 45,
+      "status": "stopped"
+    },
+    {
+      "id": "timer3",
+      "label": "Grav-Field Core Lock",
+      "seconds": 30,
+      "remaining": 30,
+      "status": "stopped"
+    },
+    {
+      "id": "timer4",
+      "label": "Cooling Vent Cycle",
+      "seconds": 30,
+      "remaining": 30,
+      "status": "stopped"
+    }
+  ]
+}

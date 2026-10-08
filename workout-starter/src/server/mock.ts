@@ -1,0 +1,90 @@
+import { serializeStatement } from '../shared/openui/serialize.js';
+import type { RequestData, Turn } from '../shared/contracts.js';
+import { ScreenDocument } from '../shared/openui/document.js';
+
+const AERO9_FIXTURE = `root = Screens([phase1, phase2, phase3, phase4])
+phase1 = Screen([badge1, title1, desc1, metric1, metric2, cue1, followups1])
+badge1 = Badge("ORBITAL CALIBRATION ACTIVE", "PHASE 01", "info")
+title1 = Text("AERO-9: Orbital Cadence Calibration", "title")
+desc1 = Text("Welcome to the Helios Zero-G training ring. Before we engage the kinetic drives, we calibrate your neural cadence and simulated kinetic harness.", "description")
+metric1 = MetricCard("74 BPM", "Harmonic Resting Pulse", "Nominal")
+metric2 = MetricCard("1.0 G", "Synthetic Gravity Baseline", "Standard")
+cue1 = Cue("Welcome Cadet. Neural telemetry linked. Prepare for simulated zero-g cadence calibration.")
+followups1 = FollowUps(["Begin Cadence Prep", "Increase Simulated Gravity to 1.5G", "Review Protocol Specs"])
+phase2 = Screen([badge2, title2, body2, timer2, keyw2, alert2, cue2, followups2])
+badge2 = Badge("ATMOSPHERIC PRE-IGNITION", "PHASE 02", "info")
+title2 = Text("Zero-G Rhythm & Synaptic Breathing", "title")
+body2 = Text("Engage the simulated harmonic cycle. Synchronize your breathing with the chamber cadence pulse.", "body")
+timer2 = Timer("Orbital Synchronization Pulse", 45)
+keyw2 = Keyword("4-4-4-4", "Box Breathing Rhythm")
+alert2 = Alert("info", "Inhale on cyan pulse, hold in zero-g apex, exhale on thruster vent.")
+cue2 = Cue("Chamber pressurized. Inhale through the solar intake, hold at micro-gravity apex, exhale steady.")
+followups2 = FollowUps(["Advance to Kinetic Circuit", "Reset Pulse Timer", "Lower Resistance"])
+phase3 = Screen([badge3, title3, progress3, metric3a, metric3b, list3, timer3, cue3, followups3])
+badge3 = Badge("HYPER-DRIVE CIRCUIT", "PHASE 03", "warning")
+title3 = Text("Tachyon Core Resistance Matrix", "title")
+progress3 = ProgressBar("Hyper-Drive Chamber Load", 75, "Station 3 of 4 · Flux nominal")
+metric3a = MetricCard("18 Pulses", "Tachyon Reps Completed", "+25%")
+metric3b = MetricCard("142 BPM", "Simulated Peak Cadence", "Target Met")
+list3 = List([item1, item2, item3])
+item1 = ListItem("Station Alpha: 12 Tachyon Resistance Pulses", "bullet")
+item2 = ListItem("Station Beta: 30s Grav-Field Isometric Hold", "bullet")
+item3 = ListItem("Station Gamma: 15 Photon Cadence Sprints", "bullet")
+timer3 = Timer("Grav-Field Core Lock", 30)
+cue3 = Cue("Full power to kinetic dampers. Maintain core alignment against the simulated graviton flux!")
+followups3 = FollowUps(["Boost Cadence (+20%)", "Complete Station", "Transition to Cooldown"])
+phase4 = Screen([badge4, title4, desc4, metric4a, metric4b, timer4, list4, cue4, followups4])
+badge4 = Badge("MISSION ACCOMPLISHED", "PHASE 04", "success")
+title4 = Text("Atmospheric Re-entry & Synaptic Debrief", "title")
+desc4 = Text("Outstanding execution. Simulated kinetic telemetry confirms optimal neuro-muscular sync.", "description")
+metric4a = MetricCard("98.4%", "Neural Flow Coherence", "Elite Rank")
+metric4b = MetricCard("420 KCAL", "Simulated Energy Expended", "Optimal")
+timer4 = Timer("Cooling Vent Cycle", 30)
+list4 = List([rec1, rec2, rec3])
+rec1 = ListItem("Vanguard Zero-G Certification: Class I Awarded", "plus")
+rec2 = ListItem("Post-routine simulated hydration protocol initiated", "bullet")
+rec3 = ListItem("Telemetry log ready for station archive", "bullet")
+cue4 = Cue("Deceleration complete. Exceptional performance, Cadet. You are certified for deep-space orbital sortie.")
+followups4 = FollowUps(["Export Mission Telemetry", "Restart AERO-9 Routine", "Return to Ready Room"])`;
+
+export function mockTurn(request: RequestData, fixture: string): Turn {
+  const last = request.messages.at(-1)?.content.trim().toLowerCase() ?? '';
+  const fence = (code: string) => '```openui\n' + code + '\n```';
+  if (last === 'load wiring sample' || last === '/demo') {
+    return { reply: 'Wiring fixture loaded. This is deterministic, not a model interpreting your skill.\n' + fence('root = Screens([])') + '\n' + fence(fixture) };
+  }
+  if (['/workout', '/start', 'start workout', 'launch workout', 'restart aero-9 routine', 'return to ready room'].includes(last)) {
+    return { reply: 'AERO-9 Orbital Cadence program loaded. Welcome aboard the Helios training deck, Cadet.\n' + fence('root = Screens([])') + '\n' + fence(AERO9_FIXTURE) };
+  }
+  if (last === 'create a real workout') {
+    return { reply: 'Mock only understands /demo, next, back and “change value to 6”. It does not read your skill. Edit the fixture/mock, test a local OpenUI patch in Builder tools, or explicitly enable a live provider.' };
+  }
+  const doc = new ScreenDocument();
+  if (request.state.ui_state) doc.apply(fence(request.state.ui_state));
+  const screens = doc.screens;
+  const index = screens.findIndex(s => s.key === doc.cursor);
+  if (['next', 'back'].includes(last) && screens.length) {
+    const target = screens[Math.max(0, Math.min(screens.length - 1, index + (last === 'back' ? -1 : 1)))];
+    return { reply: 'Fixture cursor moved.\n' + fence(`root = Screens([${screens.map(s => s.key).join(', ')}], ${target.key})`) };
+  }
+  if (last === 'begin cadence prep' && screens.some(s => s.key === 'phase2')) {
+    return { reply: 'Advancing to Atmospheric Pre-Ignition & Cadence Breathing.\n' + fence(`root = Screens([${screens.map(s => s.key).join(', ')}], phase2)`) };
+  }
+  if (['advance to kinetic circuit', 'next station'].includes(last) && screens.some(s => s.key === 'phase3')) {
+    return { reply: 'Advancing to Hyper-Drive Kinetic Circuit.\n' + fence(`root = Screens([${screens.map(s => s.key).join(', ')}], phase3)`) };
+  }
+  if (['transition to cooldown', 'complete station'].includes(last) && screens.some(s => s.key === 'phase4')) {
+    return { reply: 'Entering Atmospheric Re-entry & Synaptic Debrief.\n' + fence(`root = Screens([${screens.map(s => s.key).join(', ')}], phase4)`) };
+  }
+  if (['boost cadence (+20%)', 'increase intensity', 'boost cadence'].includes(last) && doc.program.includes('metric3b =')) {
+    return { reply: 'Hyper-Drive flux increased: simulated cadence boosted to 160 BPM (+28%).\n' + fence('metric3b = MetricCard("160 BPM", "Simulated Peak Cadence", "+28%")\nprogress3 = ProgressBar("Hyper-Drive Chamber Load", 92, "Overdrive active")') };
+  }
+  if (last === 'increase simulated gravity to 1.5g' && doc.program.includes('metric2 =')) {
+    return { reply: 'Gravity dampers adjusted to 1.5G synthetic load.\n' + fence('metric2 = MetricCard("1.5 G", "Synthetic Gravity Baseline", "High Load")') };
+  }
+  if (/^change value to (\d{1,2})$/.test(last) && doc.program.includes('count1 =')) {
+    const value = Number(last.match(/\d+/)![0]);
+    return { reply: 'Fixture values patched under their existing names.\n' + fence(serializeStatement('count1', 'Keyword', [String(value), 'Sample value']) + '\n' + serializeStatement('count2', 'Keyword', [String(value), 'Second sample value'])) };
+  }
+  return { reply: 'Mock only understands /demo, /workout, next, back and “change value to 6”. It does not read your skill. Edit the fixture/mock, test a local OpenUI patch in Builder tools, or explicitly enable a live provider.' };
+}
